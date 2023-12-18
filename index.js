@@ -1,10 +1,8 @@
-//export default js
-
-// const head =  React.createElement("div",{},
-// [React.createElement("h1",{},"am s1"),React.createElement("h2",{},"am s1")]);
+import React from "react";
+import  ReactDOM  from "react-dom/client";
 
 const head =  React.createElement("h1",{},
-"hello Arun !!");
+"hello Arun !!❤️ ");
 
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
