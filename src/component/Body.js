@@ -1,10 +1,11 @@
 
 import Card from "./Card";
-import {useState,useEffect} from "react"
+import {useState,useEffect, useContext} from "react"
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
 import { swiggyURL } from "../utils/constant";
 import useonlineStatus from "../utils/onlineStatus";
+import UserContext from "./UserContext";
 
 //import resobj from "../utils/constant";
 
@@ -64,30 +65,41 @@ if(!onlineStatus)
   );
 }
 
+ const {loggedInUser,setusername} = useContext(UserContext);
+
     return regobj.length===0 ? <Shimmer /> :(
       
       <div className="body">
-       
-     <input type="text" value={values} onChange={handleChange} />
-       
-     <button className="filter-btn" onClick={()=>{
-        
-        fetchdata();
-       }}>Reset</button>
-
-       <button className="filter-btn" onClick={()=>{
+       <div className="flex items-center">
+     <input type="text" className="border border-black h-7" value={values} onChange={handleChange} />
+     
+       <button className="px-4 py-1 m-2 bg-green-300 shadow-xl rounded-lg" onClick={()=>{
         const filterlist = regobj.filter((res) => {return (res.info.name.toLowerCase().includes(values.toLowerCase()))});
         setfilobj(filterlist);
         
        }}>search</button>
+       
+
+     <button className="px-4 py-1 m-2 bg-gray-500 shadow-xl rounded-lg" onClick={()=>{
+        
+        fetchdata();
+       }}>Reset</button>
 
       
-       <button className="filter-btn" onClick={()=>{
+       <button className="px-4 py-1 m-2 bg-blue-300 shadow-xl rounded-lg" onClick={()=>{
         const filterlist = regobj.filter((res) => {return (res.info.avgRatingString>4.4)});
         setfilobj(filterlist);
        }}>Filter</button>
-       
-        <div className="cardcontiner">
+
+        <label>Username:</label>
+         <input type="text" className="border border-black h-7" value={loggedInUser} 
+         onChange={(e)=>{setusername(e.target.value)
+         }} />
+
+       </div>
+      
+
+        <div className="flex flex-wrap rounded-lg">
         {filobj.map((res) =><Link key={res.info.id} to={"restaurant/"+res.info.id}> <Card   regdata = {res.info} /></Link>)}
            
         </div>

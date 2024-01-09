@@ -1,11 +1,13 @@
-import React from "react";
+import React, { Suspense, lazy, useEffect, useState } from "react";
 import  ReactDOM  from "react-dom/client";
 import Header  from "./component/Header";
 import Body from "./component/Body";
 import { RouterProvider, createBrowserRouter, Outlet } from "react-router-dom";
-import About from "./component/About";
+//import About from "./component/About";
 import Error from "./component/Error";
 import Restaurant from "./component/Restaurant";
+import UserContext from "./component/UserContext";
+//import Cart from "./component/Cart";
 
 
 //JSX
@@ -36,22 +38,35 @@ import Restaurant from "./component/Restaurant";
 // );
 
 
-
-
-
-
-
-
 const MainCone = () => {
+
+  
+const [username,setusername] = useState(null);
+
+
+
+useEffect(()=>{
+  const data ={
+    name: "Arun Kumar K"
+  
+  }
+  setusername(data.name)
+},[])
+
   return (
     <>
+    <UserContext.Provider value={{loggedInUser:username, setusername}}>
 <Header />
 <Outlet />
+</UserContext.Provider>
 </>
     
     
   );
 }
+
+const Cart = lazy(()=>import("./component/Cart"))
+const About = lazy(()=>import("./component/About"))
 
 const appRouter = createBrowserRouter([
   {
@@ -65,7 +80,11 @@ const appRouter = createBrowserRouter([
     ,
     {
       path:"/about",
-      element:<About />  
+      element:(<Suspense fallback={<h1>Loading....</h1>}><About />   </Suspense>)
+    },
+    {
+      path:"/cart",
+      element:<Suspense fallback={<h1>Loading....</h1>}><Cart />  </Suspense>
     },
   {
     path:"restaurant/:resid",
